@@ -39,7 +39,7 @@ export const HomeScreen = function HomeScreen() {
 
   const styles = StyleSheet.create({
     container: {
-      paddingHorizontal:'10%'
+      paddingTop:'10%'
     },
     imageCard: {
       height:300,
@@ -60,7 +60,8 @@ export const HomeScreen = function HomeScreen() {
       color:'white',
     },
     item: {
-      width: '100%',
+      width: '80%',
       marginBottom:'10%',
+      alignSelf:'center'
     }
   })
