@@ -19,8 +19,8 @@ const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator style={styles.navBar} screenOptions={() => ({
       tabBarShowLabel: false,
-      tabBarActiveTintColor: '#595454', 
-      tabBarInactiveTintColor:'#a09898', 
+      tabBarActiveTintColor: '#454045', 
+      tabBarInactiveTintColor:'#595454', 
       tabBarActiveBackgroundColor: '#fdd83a', 
       tabBarInactiveBackgroundColor :'#fdd83a',
       headerShown: false,
@@ -32,7 +32,7 @@ const Tab = createBottomTabNavigator();
         <Ionicons name="list" color={color} size={size} />
       )}} />
       <Tab.Screen name="Settings" component={SettingsScreen} options={{tabBarIcon: ({color, size}) => (
-        <Ionicons name="settings" color={color} size={size} />
+        <Ionicons name="person" color={color} size={size} />
       )}} />
     </Tab.Navigator>
   );

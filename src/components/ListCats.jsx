@@ -28,6 +28,12 @@ export const ListCats = function ListCats() {
 
     return (
       <SafeAreaView style={styles.container}>
+          <View style={styles.topLogo}>
+          <Image  
+                style={styles.logo}
+                source={require('../../assets/logo.jpg')}
+          />
+          </View>
            {(data) ? <FlatList data={data}
             renderItem={({item}) =>
             <TouchableOpacity
@@ -52,8 +58,16 @@ export const ListCats = function ListCats() {
 
   const styles = StyleSheet.create({
     container: {
-      paddingTop :50,
-      backgroundColor : '#fff8da'
+      paddingTop :20,
+      backgroundColor : '#fff8da',
+      minHeight : '100%',
+      paddingBottom : 75,
+    },
+    logo: {
+      height : 87,
+      width : '65%',
+      alignSelf: 'center',
+      marginVertical: 10,
     },
     imageCard: {
       height:300,
