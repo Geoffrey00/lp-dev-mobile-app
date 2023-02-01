@@ -37,7 +37,7 @@ export const ListCats = function ListCats() {
            {(data) ? <FlatList data={data}
             renderItem={({item}) =>
             <TouchableOpacity
-              onPress={() => navigation.push('Details', {cat: item})}
+              onPress={() => navigation.navigate('Details', {cat: item})}
               activeOpacity={0.8}
             >
             <View style={styles.item}>

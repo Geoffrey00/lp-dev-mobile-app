@@ -7,6 +7,10 @@ import { StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import { saveData } from '../helper/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { uniq } from 'lodash';
+
 
 
 
@@ -21,29 +25,125 @@ export const Cat = function Cat(nav) {
     let dureeVie = (catInfos.max_life_expectancy + catInfos.min_life_expectancy)/2;
 
     let sociabilite;
-    if (catInfos.other_pets_friendly == 0){ sociabilite = 'Démoniaque'}
-    else if (catInfos.other_pets_friendly == 1){ sociabilite = 'Très agressif'}
-    else if (catInfos.other_pets_friendly == 2){ sociabilite = 'Agressif'}
-    else if (catInfos.other_pets_friendly == 3){ sociabilite = 'Indifférent'}
-    else if (catInfos.other_pets_friendly == 4){ sociabilite = 'Sociable'}
-    else if (catInfos.other_pets_friendly == 5){ sociabilite = 'Très sociable'}
+    switch (catInfos.other_pets_friendly) {
+      case 0:
+        sociabilite = 'Démoniaque'
+        break;
+      case 1:
+        sociabilite = 'Très agressif'
+        break;
+      case 2:
+        sociabilite = 'Agressif'
+        break;
+      case 3:
+        sociabilite = 'Indifférent'
+        break;
+      case 4:
+        sociabilite = 'Sociable'
+        break;
+      case 5:
+        sociabilite = 'Très sociable'
+        break;
+      default: 
+        sociabilite = 'Non renseigné'
+    }
 
     let sante;
-    if (catInfos.general_health == 0){ sante = 'Vulnérable'}
-    else if (catInfos.general_health == 1){ sante = 'Très fragile'}
-    else if (catInfos.general_health == 2){ sante = 'Fragile'}
-    else if (catInfos.general_health == 3){ sante = 'Douillet'}
-    else if (catInfos.general_health == 4){ sante = 'Robuste'}
-    else if (catInfos.general_health == 5){ sante = 'Très robuste'}
+    switch (catInfos.general_health) {
+      case 0:
+        sante = 'Vulnérable'
+        break;
+      case 1:
+        sante = 'Très fragile'
+        break;
+      case 2:
+        sante = 'Fragile'
+        break;
+      case 3:
+        sante = 'Douillet'
+        break;
+      case 4:
+        sante = 'Robuste'
+        break;
+      case 5:
+        sante = 'Très robuste'
+        break;
+      default : 
+        sante = 'Non renseigné'
+    }
 
     let intelligence;
-    if (catInfos.general_health == 0){ intelligence = 'Ahuri'}
-    else if (catInfos.general_health == 1){ intelligence = 'Très stupide'}
-    else if (catInfos.general_health == 2){ intelligence = 'Stupide'}
-    else if (catInfos.general_health == 3){ intelligence = 'Moyen'}
-    else if (catInfos.general_health == 4){ intelligence = 'Futé'}
-    else if (catInfos.general_health == 5){ intelligence = 'Très futé'}
+    switch (catInfos.intelligence) {
+      case 0:
+        intelligence = 'Ahuri'
+        break;
+      case 1:
+        intelligence = 'Très stupide'
+        break;
+      case 2:
+        intelligence = 'Stupide'
+        break;
+      case 3:
+        intelligence = 'Moyen'
+        break;
+      case 4:
+        intelligence = 'Futé'
+        break;
+      case 5:
+        intelligence = 'Très futé'
+        break;
+      default :
+        intelligence = 'Non renseigné'
+    }
 
+    //Sauvegarde le chat dans les favoris
+    
+    const saveData = async () => {
+    
+        let storedValue = await AsyncStorage.getItem('@cat')
+       /*  await AsyncStorage.clear()
+        return; */
+        if (storedValue !== null) {
+          storedValue = await JSON.parse(storedValue)
+          var liked = false;
+          var data = []
+          storedValue.forEach(element => {
+            console.log(element.name);
+            if (element.name == catInfos.name) {
+              liked = true; 
+            }
+            else {
+              data.push(element)
+            } 
+
+          });
+          if (liked == true) {
+            try {
+
+              const jsonData = JSON.stringify(data)
+              await AsyncStorage.setItem('@cat', jsonData) 
+              
+            } catch(error) {
+              console.log(error);
+            }
+          } else {
+            try {
+              var storedData = [...storedValue, catInfos];
+              console.log(storedData);
+              const jsonData = JSON.stringify(storedData)
+              await AsyncStorage.setItem('@cat', jsonData) 
+              
+            } catch(error) {
+              console.log(error);
+            }
+          }
+        } else {
+          var storedData = [catInfos]
+          const jsonData = JSON.stringify(storedData)
+          await AsyncStorage.setItem('@cat', jsonData)  
+        }
+
+    }
 
     return (
       <SafeAreaView style={styles.container}>
@@ -53,7 +153,9 @@ export const Cat = function Cat(nav) {
             <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" color='white' size={26} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.like}>
+            <TouchableOpacity style={styles.like} onPress={
+                () => {saveData()}
+              }>
             <Ionicons name="heart" color='white' size={26} />
             </TouchableOpacity>
          </View>
