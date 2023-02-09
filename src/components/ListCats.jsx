@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, ActivityIndicator, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text,TextInput, ActivityIndicator, FlatList, TouchableOpacity, Image, Button } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -14,18 +14,22 @@ import { useFonts } from 'expo-font';
 
 export const ListCats = function ListCats() {
   const navigation = useNavigation()
+  const [text, setText] = useState('');
   const [loaded] = useFonts({
     Bubblegum: require('../../assets/fonts/Bubblegum.ttf'),
   }) 
     const [data, setData] = useState(false)
-   
+    
+    const handleApiCall = () => {
+      getDataUsingSimpleGetCall(text).then(response => setData(response))
+    }
+    
     useEffect(() => {
 
-      getDataUsingSimpleGetCall().then(response => setData(response))
+      handleApiCall();
       
     }, [])
-
-
+    
     return (
       <SafeAreaView style={styles.container}>
           <View style={styles.topLogo}>
@@ -34,6 +38,25 @@ export const ListCats = function ListCats() {
                 source={require('../../assets/logo.jpg')}
           />
           </View>
+          <View>
+              <TextInput
+              style={{height: 40}}
+              placeholder="Type here to translate!"
+              onChangeText={newText => setText(newText)}
+              defaultValue={text}
+              />
+              <Button
+                title={'Rechercher'}
+                onPress={handleApiCall}
+              >
+                Rechercher
+              </Button>
+            </View>
+            <View>
+              <Text>
+                {text}
+              </Text>
+            </View>
            {(data) ? <FlatList data={data}
             renderItem={({item}) =>
             <TouchableOpacity
@@ -64,8 +87,8 @@ export const ListCats = function ListCats() {
       paddingBottom : 75,
     },
     logo: {
-      height : 87,
-      width : '65%',
+      height : 80,
+      width : '60%',
       alignSelf: 'center',
       marginVertical: 10,
     },

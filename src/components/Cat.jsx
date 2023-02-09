@@ -9,7 +9,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { saveData } from '../helper/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { uniq } from 'lodash';
+import { useEffect, useState } from 'react';
 
 
 
@@ -97,7 +97,7 @@ export const Cat = function Cat(nav) {
     }
 
     //Sauvegarde le chat dans les favoris
-    
+
     const saveData = async () => {
     
         let storedValue = await AsyncStorage.getItem('@cat')
@@ -108,9 +108,9 @@ export const Cat = function Cat(nav) {
           var liked = false;
           var data = []
           storedValue.forEach(element => {
-            console.log(element.name);
             if (element.name == catInfos.name) {
               liked = true; 
+              
             }
             else {
               data.push(element)
@@ -119,7 +119,6 @@ export const Cat = function Cat(nav) {
           });
           if (liked == true) {
             try {
-
               const jsonData = JSON.stringify(data)
               await AsyncStorage.setItem('@cat', jsonData) 
               
@@ -129,7 +128,6 @@ export const Cat = function Cat(nav) {
           } else {
             try {
               var storedData = [...storedValue, catInfos];
-              console.log(storedData);
               const jsonData = JSON.stringify(storedData)
               await AsyncStorage.setItem('@cat', jsonData) 
               
@@ -144,6 +142,7 @@ export const Cat = function Cat(nav) {
         }
 
     }
+    
 
     return (
       <SafeAreaView style={styles.container}>
@@ -156,7 +155,7 @@ export const Cat = function Cat(nav) {
             <TouchableOpacity style={styles.like} onPress={
                 () => {saveData()}
               }>
-            <Ionicons name="heart" color='white' size={26} />
+            <Ionicons name="star" color='yellow' size={26} />
             </TouchableOpacity>
          </View>
          <Text style={styles.title}>{catInfos.name}</Text>
