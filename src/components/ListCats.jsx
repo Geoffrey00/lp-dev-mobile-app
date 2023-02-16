@@ -3,9 +3,8 @@ import { View, Text,TextInput, ActivityIndicator, FlatList, TouchableOpacity, Im
 import { StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import {getDataUsingSimpleGetCall} from '../api/api'
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 
@@ -38,24 +37,21 @@ export const ListCats = function ListCats() {
                 source={require('../../assets/logo.jpg')}
           />
           </View>
-          <View>
-              <TextInput
+          <View style={styles.searchBlock}>
+            <View>
+            <TextInput
               style={{height: 40}}
-              placeholder="Type here to translate!"
+              placeholder="Entrer votre recherche juste ici"
               onChangeText={newText => setText(newText)}
               defaultValue={text}
               />
-              <Button
-                title={'Rechercher'}
-                onPress={handleApiCall}
-              >
-                Rechercher
-              </Button>
+            </View>    
+              <View style={styles.searchBtnBlock}>
+                <TouchableOpacity type="clear" style={styles.searchbtn} onPress={handleApiCall}><Ionicons name="search" color='white' size={32} /></TouchableOpacity>
+              </View>
+              
             </View>
             <View>
-              <Text>
-                {text}
-              </Text>
             </View>
            {(data) ? <FlatList data={data}
             renderItem={({item}) =>
@@ -85,6 +81,22 @@ export const ListCats = function ListCats() {
       backgroundColor : '#fff8da',
       minHeight : '100%',
       paddingBottom : 75,
+    },
+    searchBlock: {
+      flexDirection:'row', 
+      flexWrap:'wrap',
+      alignSelf:'center'
+    },
+    searchBtnBlock: {
+      marginLeft:25,
+      backgroundColor:'#fdd83a',
+      borderRadius:100,
+      marginBottom:10
+    },
+    searchbtn: {
+      margin:5,
+      marginHorizontal:7,
+      alignSelf:'center'
     },
     logo: {
       height : 80,
